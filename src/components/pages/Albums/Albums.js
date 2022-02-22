@@ -8,9 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const Albums = () => {
+
     const [albumItem,setAlbumsItem] = useState([])
     const {users} = useContext(UserContext)
-    console.log(albumItem)
 
     const getAlbumsItem  =  () => {
         getRequestData(ALBUMS_ENDPOINT)
@@ -26,7 +26,7 @@ const Albums = () => {
         {
           title: 'User Name',
           dataIndex: 'userId',
-          key: 'userName',
+          key: `userName${albumItem.map(item => item.id)}`,
           render: (userId) => {
               const userName = users.find(item => item.id === userId)?.name
               return userName 
@@ -35,27 +35,26 @@ const Albums = () => {
         {
           title: 'Album Title',
           dataIndex: 'title',
-          key: 'title',
+          key: `title${albumItem.map(item => item.id)}`,
         },
         {
           title: 'Action',
-          key: 'userActions',
+          key: `userActions${albumItem.map(item => item.id)}`,
           dataIndex: 'userId',
           render: (id) => {
 
             const postId = users.find(item => item.id === id)?.id
-            console.log(postId)
-            
+    
             return(
                 <Link to={`${window.location.pathname}/${postId}`}>
-                    <Button key={albumItem.map(item => item.id)} type="primary">Show Photos</Button>
+                    <Button  type="primary">Show Photos</Button>
                 </Link>
             )  
           }
         },
       ];
       
-
+      console.log(albumItem.map(item => item.id))
     return(
         <LayoutComponent>
             <Table columns={columns}  dataSource={albumItem} />

@@ -1,0 +1,14 @@
+.site-card-wrapper { 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    & .post-card{
+        width: 30%;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+}

@@ -1,0 +1,10 @@
+.user-info{
+    background: white !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; 
+        & div{
+            width: 30%;
+        }
+}

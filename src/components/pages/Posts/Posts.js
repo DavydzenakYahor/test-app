@@ -5,6 +5,7 @@ import LayoutComponent from '../../Layout/LayoutComponent';
 import { UserContext } from '../../../UserContext/UserContext';
 import { POSTS_ENDPOINT, COMMENTS_ENDPOINT } from '../../../Constans/constantsUrl';
 import { getRequestData } from '../../../Request/requestData';
+import './Posts.scss'
 
 const PostsComponent = () => {
 
@@ -58,30 +59,26 @@ useEffect(() => {
     return(
         <LayoutComponent>
             <div className="site-card-wrapper">
-                <Row gutter={16}>
-                    {posts.map(item => {
-
-                        const {id,userId,title,body} = item;
-
-                        return(
-                            <Col key={id} span={8}>
-                                <Card  
-                                    hoverable 
-                                    title={users.map(item => {
-                                        return item.id === userId && item.name
-                                    })} 
-                                    bordered={true}>
-                                    <Avatar icon={<UserOutlined />} />
-                                    <p>{title}</p>
-                                    <p>{body}</p>
-                                    <Button 
-                                        type="primary" 
-                                        onClick={() => showModal(userId,id)}>Show comments</Button>
-                                </Card>
-                            </Col>
-                        )
-                    })}  
-                </Row>
+                {posts.map(item => {
+                    const {id,userId,title,body} = item;
+                    return(
+                        <Card  
+                            key={id}
+                            className='post-card'
+                            hoverable 
+                                title={users.map(item => {
+                                    return item.id === userId && item.name
+                                })} 
+                                bordered={true}>
+                                <Avatar icon={<UserOutlined />} />
+                                <p>{title}</p>
+                                <p>{body}</p>
+                                <Button 
+                                    type="primary" 
+                                    onClick={() => showModal(userId,id)}>Show comments</Button>
+                            </Card>                      
+                    )
+                })}  
             </div>
             <Modal 
                 title="Comments" 

@@ -8,16 +8,17 @@ import { updateRequestData } from "../../../Request/requestData";
 import { TODOS_ENDPOINT } from "../../../Constans/constantsUrl";
 
 
-
 const Todos = () => {
 
     const {users} = useContext(UserContext);
     const [todos,setTodos] = useState([]);
     const [nameInputValue, setNameInputValue] = useState('');
     const [titleInputValue, setTitleInputValue] = useState('');
-    const [selectValue, setSelectValue] = useState(true);
+    const [selectValue, setSelectValue] = useState(null);
     const [cloneTodos,setCloneTodos] = useState([])
+    const [checkboxValue,setCheckboxValue] = useState(false)
     const { Option } = Select;
+    console.log(cloneTodos)
 
     const getTodos = () => {
         getRequestData(TODOS_ENDPOINT)
@@ -44,11 +45,20 @@ const Todos = () => {
 
    
    const onSearch = () => {
-    const renderSerchItems = cloneTodos.filter(todo => (
-        
-        (todo.title.includes(titleInputValue.toLowerCase()) && selectValue ? todo.completed : !todo.completed) &&
-        (todo.userName.toLowerCase().includes(nameInputValue.toLowerCase()) && selectValue ? todo.completed : !todo.completed)
-    )); 
+    const renderSerchItems = cloneTodos.filter(todo => {
+        if(selectValue) {
+            return (
+                (todo.title.includes(titleInputValue.toLowerCase()) && todo.completed) &&
+                (todo.userName.toLowerCase().includes(nameInputValue.toLowerCase()) && todo.completed)
+            )
+        } else if(!selectValue) {
+            return(
+                (todo.title.includes(titleInputValue.toLowerCase()) && !todo.completed) &&
+                (todo.userName.toLowerCase().includes(nameInputValue.toLowerCase()) && !todo.completed)
+            )
+        }
+    }
+    ); 
     
       setTodos(renderSerchItems);
    }
@@ -58,7 +68,18 @@ const Todos = () => {
    
     
       function onChange(e) {
-        console.log(`checked = ${e.target.checked}`);
+        setCheckboxValue(e.target.checked)
+        updateRequestData(`${TODOS_ENDPOINT}/${e.target.id}`, {
+            completed: !checkboxValue
+        })
+            .then(res => cloneTodos.map(item => {
+                if(item.id === res.data.id) {
+                    item.completed = res.data.completed
+                        return item
+                    }
+                }) 
+            )
+            .catch(err => console.log(err))
       }
 
     return(
